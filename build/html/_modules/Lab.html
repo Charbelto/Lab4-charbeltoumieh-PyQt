@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab &mdash; Lab3-4 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Lab3-4
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Lab 2</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Lab3-4</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">Lab</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for Lab</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QTableWidget</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">,</span> <span class="n">QScrollArea</span><span class="p">,</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QGridLayout</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<div class="viewcode-block" id="Person">
+<a class="viewcode-back" href="../Lab.html#Lab.Person">[docs]</a>
+<span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a base class representation of a person in the School Management System.</span>
+
+<span class="sd">    :param name: The name of the person</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param age: The age of the person</span>
+<span class="sd">    :type age: int</span>
+<span class="sd">    :param email: The email address of the person</span>
+<span class="sd">    :type email: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="o">=</span> <span class="n">email</span>
+
+<div class="viewcode-block" id="Person.introduce">
+<a class="viewcode-back" href="../Lab.html#Lab.Person.introduce">[docs]</a>
+    <span class="k">def</span> <span class="nf">introduce</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints an introduction of the person.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hi, I&#39;m </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="si">}</span><span class="s2"> years old.&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+
+
+<div class="viewcode-block" id="Student">
+<a class="viewcode-back" href="../Lab.html#Lab.Student">[docs]</a>
+<span class="k">class</span> <span class="nc">Student</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents a student in the School Management System. It inherits from the Person class.</span>
+
+<span class="sd">    :param name: The name of the student</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param age: The age of the student</span>
+<span class="sd">    :type age: int</span>
+<span class="sd">    :param email: The email address of the student</span>
+<span class="sd">    :type email: str</span>
+<span class="sd">    :param student_id: The unique identifier for the student</span>
+<span class="sd">    :type student_id: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">student_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_id</span> <span class="o">=</span> <span class="n">student_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registered_courses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Course</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Student.register_course">
+<a class="viewcode-back" href="../Lab.html#Lab.Student.register_course">[docs]</a>
+    <span class="k">def</span> <span class="nf">register_course</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">course</span><span class="p">:</span> <span class="s1">&#39;Course&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Registers the student for a course.</span>
+
+<span class="sd">        :param course: The course to register for</span>
+<span class="sd">        :type course: Course</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registered_courses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">course</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has registered for </span><span class="si">{</span><span class="n">course</span><span class="o">.</span><span class="n">course_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Instructor">
+<a class="viewcode-back" href="../Lab.html#Lab.Instructor">[docs]</a>
+<span class="k">class</span> <span class="nc">Instructor</span><span class="p">(</span><span class="n">Person</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents an instructor in the School Management System. It inherits from the Person class.</span>
+
+<span class="sd">    :param name: The name of the instructor</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param age: The age of the instructor</span>
+<span class="sd">    :type age: int</span>
+<span class="sd">    :param email: The email address of the instructor</span>
+<span class="sd">    :type email: str</span>
+<span class="sd">    :param instructor_id: The unique identifier for the instructor</span>
+<span class="sd">    :type instructor_id: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">instructor_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructor_id</span> <span class="o">=</span> <span class="n">instructor_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assigned_courses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Course&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Instructor.assign_course">
+<a class="viewcode-back" href="../Lab.html#Lab.Instructor.assign_course">[docs]</a>
+    <span class="k">def</span> <span class="nf">assign_course</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">course</span><span class="p">:</span> <span class="s1">&#39;Course&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns a course to the instructor.</span>
+
+<span class="sd">        :param course: The course to assign</span>
+<span class="sd">        :type course: Course</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assigned_courses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">course</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is assigned to teach </span><span class="si">{</span><span class="n">course</span><span class="o">.</span><span class="n">course_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Course">
+<a class="viewcode-back" href="../Lab.html#Lab.Course">[docs]</a>
+<span class="k">class</span> <span class="nc">Course</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents a course in the School Management System.</span>
+
+<span class="sd">    :param course_id: The unique identifier for the course</span>
+<span class="sd">    :type course_id: str</span>
+<span class="sd">    :param course_name: The name of the course</span>
+<span class="sd">    :type course_name: str</span>
+<span class="sd">    :param instructor: The instructor teaching the course</span>
+<span class="sd">    :type instructor: Instructor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">course_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">course_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">instructor</span><span class="p">:</span> <span class="n">Instructor</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_id</span> <span class="o">=</span> <span class="n">course_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_name</span> <span class="o">=</span> <span class="n">course_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructor</span> <span class="o">=</span> <span class="n">instructor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enrolled_students</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Student</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Course.add_student">
+<a class="viewcode-back" href="../Lab.html#Lab.Course.add_student">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_student</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">student</span><span class="p">:</span> <span class="n">Student</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a student to the course.</span>
+
+<span class="sd">        :param student: The student to add to the course</span>
+<span class="sd">        :type student: Student</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enrolled_students</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">student</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">student</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has been added to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">course_name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="create_tables">
+<a class="viewcode-back" href="../Lab.html#Lab.create_tables">[docs]</a>
+<span class="k">def</span> <span class="nf">create_tables</span><span class="p">():</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;CREATE TABLE IF NOT EXISTS students (</span>
+<span class="s1">        student_id TEXT PRIMARY KEY,</span>
+<span class="s1">        name TEXT,</span>
+<span class="s1">        age INTEGER,</span>
+<span class="s1">        email TEXT</span>
+<span class="s1">    )&#39;&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;CREATE TABLE IF NOT EXISTS instructors (</span>
+<span class="s1">        instructor_id TEXT PRIMARY KEY,</span>
+<span class="s1">        name TEXT,</span>
+<span class="s1">        age INTEGER,</span>
+<span class="s1">        email TEXT</span>
+<span class="s1">    )&#39;&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;CREATE TABLE IF NOT EXISTS courses (</span>
+<span class="s1">        course_id TEXT PRIMARY KEY,</span>
+<span class="s1">        course_name TEXT,</span>
+<span class="s1">        instructor_id TEXT,</span>
+<span class="s1">        FOREIGN KEY (instructor_id) REFERENCES instructors (instructor_id)</span>
+<span class="s1">    )&#39;&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;CREATE TABLE IF NOT EXISTS registrations (</span>
+<span class="s1">        student_id TEXT,</span>
+<span class="s1">        course_id TEXT,</span>
+<span class="s1">        FOREIGN KEY (student_id) REFERENCES students (student_id),</span>
+<span class="s1">        FOREIGN KEY (course_id) REFERENCES courses (course_id),</span>
+<span class="s1">        PRIMARY KEY (student_id, course_id)</span>
+<span class="s1">    )&#39;&#39;&#39;</span><span class="p">)</span>
+
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="save_data_to_file">
+<a class="viewcode-back" href="../Lab.html#Lab.save_data_to_file">[docs]</a>
+<span class="k">def</span> <span class="nf">save_data_to_file</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Student</span><span class="p">,</span> <span class="n">Instructor</span><span class="p">,</span> <span class="n">Course</span><span class="p">]],</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Saves data to a JSON file.</span>
+
+<span class="sd">    :param data: The list of objects to save</span>
+<span class="sd">    :type data: List[Union[Student, Instructor, Course]]</span>
+<span class="sd">    :param filename: The name of the file to save the data to</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">([</span><span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">data</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="load_data_from_file">
+<a class="viewcode-back" href="../Lab.html#Lab.load_data_from_file">[docs]</a>
+<span class="k">def</span> <span class="nf">load_data_from_file</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">class_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Student</span><span class="p">,</span> <span class="n">Instructor</span><span class="p">,</span> <span class="n">Course</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads data from a JSON file.</span>
+
+<span class="sd">    :param filename: The name of the file to load the data from</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :param class_type: The type of class to instantiate (Student, Instructor, or Course)</span>
+<span class="sd">    :type class_type: type</span>
+<span class="sd">    :return: A list of instantiated objects</span>
+<span class="sd">    :rtype: List[Union[Student, Instructor, Course]]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">class_type</span><span class="p">(</span><span class="o">**</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="is_valid_email">
+<a class="viewcode-back" href="../Lab.html#Lab.is_valid_email">[docs]</a>
+<span class="k">def</span> <span class="nf">is_valid_email</span><span class="p">(</span><span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if an email address is valid.</span>
+
+<span class="sd">    :param email: The email address to validate</span>
+<span class="sd">    :type email: str</span>
+<span class="sd">    :return: True if the email is valid, False otherwise</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^@]+@[^@]+\.[^@]+&quot;</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="validate_person_data">
+<a class="viewcode-back" href="../Lab.html#Lab.validate_person_data">[docs]</a>
+<span class="k">def</span> <span class="nf">validate_person_data</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates the data for a person (Student or Instructor).</span>
+
+<span class="sd">    :param name: The name to validate</span>
+<span class="sd">    :type name: str</span>
+<span class="sd">    :param age: The age to validate</span>
+<span class="sd">    :type age: int</span>
+<span class="sd">    :param email: The email address to validate</span>
+<span class="sd">    :type email: str</span>
+<span class="sd">    :raises ValueError: If any of the data is invalid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Name cannot be empty&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Age cannot be negative&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_email</span><span class="p">(</span><span class="n">email</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid email format&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SchoolManagementSystem">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem">[docs]</a>
+<span class="k">class</span> <span class="nc">SchoolManagementSystem</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the main application window for the School Management System. It handles the user interface and database operations for managing students, instructors, courses, and registrations.</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        layout (QVBoxLayout): The main layout of the application window</span>
+<span class="sd">        instructor_combo_options (list): A list of instructor options for combo boxes</span>
+<span class="sd">        table (QTableWidget): The table widget for displaying records</span>
+<span class="sd">        student_id_input (QLineEdit): Input field for student ID</span>
+<span class="sd">        student_name_input (QLineEdit): Input field for student name</span>
+<span class="sd">        student_age_input (QLineEdit): Input field for student age</span>
+<span class="sd">        student_email_input (QLineEdit): Input field for student email</span>
+<span class="sd">        instructor_id_input (QLineEdit): Input field for instructor ID</span>
+<span class="sd">        instructor_name_input (QLineEdit): Input field for instructor name</span>
+<span class="sd">        instructor_age_input (QLineEdit): Input field for instructor age</span>
+<span class="sd">        instructor_email_input (QLineEdit): Input field for instructor email</span>
+<span class="sd">        course_id_input (QLineEdit): Input field for course ID</span>
+<span class="sd">        course_name_input (QLineEdit): Input field for course name</span>
+<span class="sd">        course_instructor_combo (QComboBox): Combo box for selecting course instructor</span>
+<span class="sd">        student_combo (QComboBox): Combo box for selecting a student</span>
+<span class="sd">        course_combo (QComboBox): Combo box for selecting a course</span>
+<span class="sd">        search_input (QLineEdit): Input field for search queries</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor method. Initializes the SchoolManagementSystem window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;School Management System&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+
+        <span class="n">central_widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">scroll_area</span> <span class="o">=</span> <span class="n">QScrollArea</span><span class="p">()</span>
+        <span class="n">scroll_area</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">scroll_area</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">scroll_area</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructor_combo_options</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_ui</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SchoolManagementSystem.setup_ui">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.setup_ui">[docs]</a>
+    <span class="k">def</span> <span class="nf">setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets up the user interface for the application.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Student section</span>
+        <span class="n">student_layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Student Management&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">student_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_id_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_name_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_age_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_email_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Student ID:&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">student_id_input</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Name:&quot;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">student_name_input</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Age:&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">student_age_input</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Email:&quot;</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">student_email_input</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">student_button_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_student_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Add Student&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_student_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_student</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_student_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Update Student&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_student_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_student</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_student_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Delete Student&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_student_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_student</span><span class="p">)</span>
+        <span class="n">student_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_student_button</span><span class="p">)</span>
+        <span class="n">student_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_student_button</span><span class="p">)</span>
+        <span class="n">student_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_student_button</span><span class="p">)</span>
+        <span class="n">student_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">student_button_layout</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Instructor section</span>
+        <span class="n">instructor_layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Instructor Management&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">instructor_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructor_id_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructor_name_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructor_age_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instructor_email_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Instructor ID:&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instructor_id_input</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Name:&quot;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instructor_name_input</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Age:&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instructor_age_input</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Email:&quot;</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instructor_email_input</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">instructor_button_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_instructor_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Add Instructor&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_instructor_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_instructor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_instructor_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Update Instructor&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_instructor_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_instructor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_instructor_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Delete Instructor&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_instructor_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_instructor</span><span class="p">)</span>
+        <span class="n">instructor_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_instructor_button</span><span class="p">)</span>
+        <span class="n">instructor_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_instructor_button</span><span class="p">)</span>
+        <span class="n">instructor_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_instructor_button</span><span class="p">)</span>
+        <span class="n">instructor_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">instructor_button_layout</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Course section</span>
+        <span class="n">course_layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Course Management&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">course_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_id_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_name_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_instructor_combo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        
+        <span class="n">course_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Course ID:&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">course_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">course_id_input</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">course_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Course Name:&quot;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">course_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">course_name_input</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">course_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Instructor:&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">course_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">course_instructor_combo</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">course_button_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_course_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Add Course&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_course_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_course</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_course_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Update Course&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_course_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_course</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_course_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Delete Course&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_course_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_course</span><span class="p">)</span>
+        <span class="n">course_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">add_course_button</span><span class="p">)</span>
+        <span class="n">course_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_course_button</span><span class="p">)</span>
+        <span class="n">course_button_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_course_button</span><span class="p">)</span>
+        <span class="n">course_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">course_button_layout</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Registration section</span>
+        <span class="n">registration_layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Course Registration&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">registration_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_combo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_combo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        
+        <span class="n">registration_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Student:&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">registration_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">student_combo</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">registration_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Course:&quot;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">registration_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">course_combo</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Register Student to Course&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_student_to_course</span><span class="p">)</span>
+        <span class="n">registration_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_button</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Other buttons</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display_records_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Display Records&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display_records_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_records</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_records_button</span><span class="p">)</span>
+
+        <span class="n">search_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_input</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Search&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_records</span><span class="p">)</span>
+        <span class="n">search_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Search:&quot;</span><span class="p">))</span>
+        <span class="n">search_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_input</span><span class="p">)</span>
+        <span class="n">search_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_button</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">search_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Save Data&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_button</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Load Data&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">load_button</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_button</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Export to CSV&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_button</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">export_to_csv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">export_button</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.update_dropdowns">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.update_dropdowns">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_dropdowns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the combo boxes with the latest data from the database.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_instructor_combo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_combo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_combo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT instructor_id, name FROM instructors&quot;</span><span class="p">)</span>
+        <span class="n">instructors</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_instructor_combo</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">instructors</span><span class="p">])</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT student_id, name FROM students&quot;</span><span class="p">)</span>
+        <span class="n">students</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">student_combo</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">students</span><span class="p">])</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT course_id, course_name FROM courses&quot;</span><span class="p">)</span>
+        <span class="n">courses</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">course_combo</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">courses</span><span class="p">])</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.show_popup">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.show_popup">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_popup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Displays a popup message to the user.</span>
+<span class="sd">        </span>
+<span class="sd">        :param message: The message to display</span>
+<span class="sd">        :type message: str</span>
+<span class="sd">        :param is_error: Whether the message is an error message, defaults to False</span>
+<span class="sd">        :type is_error: bool, optional</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">msg_box</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
+        <span class="n">msg_box</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_error</span><span class="p">:</span>
+            <span class="n">msg_box</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Critical</span><span class="p">)</span>
+            <span class="n">msg_box</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg_box</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Information</span><span class="p">)</span>
+            <span class="n">msg_box</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Success&quot;</span><span class="p">)</span>
+        <span class="n">msg_box</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.add_student">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.add_student">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_student</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a student to the database.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">student_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_name_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">student_age_input</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_email_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+            <span class="n">validate_person_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+
+            <span class="n">student</span> <span class="o">=</span> <span class="n">Student</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">student_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_to_database</span><span class="p">(</span><span class="s1">&#39;students&#39;</span><span class="p">,</span> <span class="n">student</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Student </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> added successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error adding student: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.update_student">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.update_student">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_student</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates a student in the database.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">student_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_name_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">student_age_input</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_email_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+            <span class="n">validate_person_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE students SET name=?, age=?, email=? WHERE student_id=?&quot;</span><span class="p">,</span>
+                           <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">student_id</span><span class="p">))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Student </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> updated successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error updating student: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.delete_student">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.delete_student">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_student</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes a student from the database.&quot;&quot;&quot;</span>
+        <span class="n">student_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">student_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="s2">&quot;Please enter a student ID to delete.&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="c1"># Delete student&#39;s registrations first</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM registrations WHERE student_id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">student_id</span><span class="p">,))</span>
+
+        <span class="c1"># Then delete the student</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM students WHERE student_id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">student_id</span><span class="p">,))</span>
+        
+        <span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No student found with ID </span><span class="si">{</span><span class="n">student_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Student with ID </span><span class="si">{</span><span class="n">student_id</span><span class="si">}</span><span class="s2"> deleted successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.add_instructor">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.add_instructor">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_instructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds an instructor to the database.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">instructor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructor_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructor_name_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instructor_age_input</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructor_email_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+            <span class="n">validate_person_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+
+            <span class="n">instructor</span> <span class="o">=</span> <span class="n">Instructor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">instructor_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_to_database</span><span class="p">(</span><span class="s1">&#39;instructors&#39;</span><span class="p">,</span> <span class="n">instructor</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instructor </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> added successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error adding instructor: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.update_instructor">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.update_instructor">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_instructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates an instructor in the database.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">instructor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructor_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructor_name_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">instructor_age_input</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+            <span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructor_email_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+            <span class="n">validate_person_data</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
+
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE instructors SET name=?, age=?, email=? WHERE instructor_id=?&quot;</span><span class="p">,</span>
+                           <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">instructor_id</span><span class="p">))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instructor </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> updated successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error updating instructor: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.delete_instructor">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.delete_instructor">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_instructor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes an instructor from the database.&quot;&quot;&quot;</span>
+        <span class="n">instructor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instructor_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instructor_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="s2">&quot;Please enter an instructor ID to delete.&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="c1"># Check if instructor is assigned to any courses</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM courses WHERE instructor_id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">instructor_id</span><span class="p">,))</span>
+        <span class="n">course_count</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">course_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot delete instructor. They are assigned to </span><span class="si">{</span><span class="n">course_count</span><span class="si">}</span><span class="s2"> course(s).&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Delete the instructor</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM instructors WHERE instructor_id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">instructor_id</span><span class="p">,))</span>
+            
+            <span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No instructor found with ID </span><span class="si">{</span><span class="n">instructor_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instructor with ID </span><span class="si">{</span><span class="n">instructor_id</span><span class="si">}</span><span class="s2"> deleted successfully.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.add_course">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.add_course">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_course</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a course to the database.&quot;&quot;&quot;</span>
+        <span class="n">course_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">course_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_name_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">instructor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_instructor_combo</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; - &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO courses (course_id, course_name, instructor_id) VALUES (?, ?, ?)&quot;</span><span class="p">,</span>
+                       <span class="p">(</span><span class="n">course_id</span><span class="p">,</span> <span class="n">course_name</span><span class="p">,</span> <span class="n">instructor_id</span><span class="p">))</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Course </span><span class="si">{</span><span class="n">course_name</span><span class="si">}</span><span class="s2"> added successfully.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.update_course">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.update_course">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_course</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates a course in the database.&quot;&quot;&quot;</span>
+        <span class="n">course_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">course_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_name_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">instructor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_instructor_combo</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; - &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE courses SET course_name=?, instructor_id=? WHERE course_id=?&quot;</span><span class="p">,</span>
+                       <span class="p">(</span><span class="n">course_name</span><span class="p">,</span> <span class="n">instructor_id</span><span class="p">,</span> <span class="n">course_id</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No course found with ID </span><span class="si">{</span><span class="n">course_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Course </span><span class="si">{</span><span class="n">course_name</span><span class="si">}</span><span class="s2"> updated successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.delete_course">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.delete_course">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete_course</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes a course from the database.&quot;&quot;&quot;</span>
+        <span class="n">course_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_id_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">course_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="s2">&quot;Please enter a course ID to delete.&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="c1"># Delete course registrations first</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM registrations WHERE course_id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">course_id</span><span class="p">,))</span>
+
+        <span class="c1"># Then delete the course</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM courses WHERE course_id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">course_id</span><span class="p">,))</span>
+        
+        <span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No course found with ID </span><span class="si">{</span><span class="n">course_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Course with ID </span><span class="si">{</span><span class="n">course_id</span><span class="si">}</span><span class="s2"> deleted successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.register_student_to_course">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.register_student_to_course">[docs]</a>
+    <span class="k">def</span> <span class="nf">register_student_to_course</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Registers a student to a course.&quot;&quot;&quot;</span>
+        <span class="n">student_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">student_combo</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; - &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">course_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">course_combo</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; - &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO registrations (student_id, course_id) VALUES (?, ?)&quot;</span><span class="p">,</span>
+                           <span class="p">(</span><span class="n">student_id</span><span class="p">,</span> <span class="n">course_id</span><span class="p">))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Student </span><span class="si">{</span><span class="n">student_id</span><span class="si">}</span><span class="s2"> registered to course </span><span class="si">{</span><span class="n">course_id</span><span class="si">}</span><span class="s2"> successfully.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Student </span><span class="si">{</span><span class="n">student_id</span><span class="si">}</span><span class="s2"> is already registered to course </span><span class="si">{</span><span class="n">course_id</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.add_to_database">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.add_to_database">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_to_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Student</span><span class="p">,</span> <span class="n">Instructor</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a new record to the specified table in the database.</span>
+
+<span class="sd">:param table: The name of the table to add the record to</span>
+<span class="sd">:type table: str</span>
+<span class="sd">:param obj: The object (Student or Instructor) to add to the database</span>
+<span class="sd">:type obj: Union[Student, Instructor]&quot;&quot;&quot;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">table</span> <span class="o">==</span> <span class="s1">&#39;students&#39;</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO students (student_id, name, age, email) VALUES (?, ?, ?, ?)&quot;</span><span class="p">,</span>
+                           <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">student_id</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">_email</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">table</span> <span class="o">==</span> <span class="s1">&#39;instructors&#39;</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO instructors (instructor_id, name, age, email) VALUES (?, ?, ?, ?)&quot;</span><span class="p">,</span>
+                           <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">instructor_id</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">_email</span><span class="p">))</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.display_records">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.display_records">[docs]</a>
+    <span class="k">def</span> <span class="nf">display_records</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Displays all records in the database.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">QTableWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">([</span><span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Age/Course Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Email/Instructor ID&quot;</span><span class="p">])</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Student&#39; as type, student_id, name, age, email FROM students&quot;</span><span class="p">)</span>
+        <span class="n">students</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Instructor&#39; as type, instructor_id, name, age, email FROM instructors&quot;</span><span class="p">)</span>
+        <span class="n">instructors</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Course&#39; as type, course_id, course_name, instructor_id, &#39;&#39; FROM courses&quot;</span><span class="p">)</span>
+        <span class="n">courses</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">all_records</span> <span class="o">=</span> <span class="n">students</span> <span class="o">+</span> <span class="n">instructors</span> <span class="o">+</span> <span class="n">courses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_records</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">record</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_records</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.search_records">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.search_records">[docs]</a>
+    <span class="k">def</span> <span class="nf">search_records</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Searches for records in the database based on the search query.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">removeWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">QTableWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">([</span><span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Age/Course Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Email/Instructor ID&quot;</span><span class="p">])</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_input</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Student&#39; as type, student_id, name, age, email FROM students WHERE name LIKE ? OR student_id LIKE ?&quot;</span><span class="p">,</span>
+                       <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">))</span>
+        <span class="n">students</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Instructor&#39; as type, instructor_id, name, age, email FROM instructors WHERE name LIKE ? OR instructor_id LIKE ?&quot;</span><span class="p">,</span>
+                       <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">))</span>
+        <span class="n">instructors</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Course&#39; as type, course_id, course_name, instructor_id, &#39;&#39; FROM courses WHERE course_name LIKE ? OR course_id LIKE ?&quot;</span><span class="p">,</span>
+                       <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">))</span>
+        <span class="n">courses</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">all_records</span> <span class="o">=</span> <span class="n">students</span> <span class="o">+</span> <span class="n">instructors</span> <span class="o">+</span> <span class="n">courses</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_records</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">record</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_records</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.save_data">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.save_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves the data from the database to JSON files.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM students&quot;</span><span class="p">)</span>
+            <span class="n">students</span> <span class="o">=</span> <span class="p">[</span><span class="n">Student</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">age</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">student_id</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()]</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM instructors&quot;</span><span class="p">)</span>
+            <span class="n">instructors</span> <span class="o">=</span> <span class="p">[</span><span class="n">Instructor</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">age</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">email</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">instructor_id</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()]</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM courses&quot;</span><span class="p">)</span>
+            <span class="n">courses</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">():</span>
+                <span class="n">instructor</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">instructors</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">instructor_id</span> <span class="o">==</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">courses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Course</span><span class="p">(</span><span class="n">course_id</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">course_name</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">instructor</span><span class="o">=</span><span class="n">instructor</span><span class="p">))</span>
+
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">save_data_to_file</span><span class="p">(</span><span class="n">students</span><span class="p">,</span> <span class="s1">&#39;students.json&#39;</span><span class="p">)</span>
+            <span class="n">save_data_to_file</span><span class="p">(</span><span class="n">instructors</span><span class="p">,</span> <span class="s1">&#39;instructors.json&#39;</span><span class="p">)</span>
+            <span class="n">save_data_to_file</span><span class="p">(</span><span class="n">courses</span><span class="p">,</span> <span class="s1">&#39;courses.json&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="s2">&quot;Data saved successfully.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error saving data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.load_data">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.load_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the data from JSON files into the database.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">students</span> <span class="o">=</span> <span class="n">load_data_from_file</span><span class="p">(</span><span class="s1">&#39;students.json&#39;</span><span class="p">,</span> <span class="n">Student</span><span class="p">)</span>
+            <span class="n">instructors</span> <span class="o">=</span> <span class="n">load_data_from_file</span><span class="p">(</span><span class="s1">&#39;instructors.json&#39;</span><span class="p">,</span> <span class="n">Instructor</span><span class="p">)</span>
+            <span class="n">courses</span> <span class="o">=</span> <span class="n">load_data_from_file</span><span class="p">(</span><span class="s1">&#39;courses.json&#39;</span><span class="p">,</span> <span class="n">Course</span><span class="p">)</span>
+
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM registrations&quot;</span><span class="p">)</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM courses&quot;</span><span class="p">)</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM students&quot;</span><span class="p">)</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM instructors&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="p">:</span>
+                <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO students (student_id, name, age, email) VALUES (?, ?, ?, ?)&quot;</span><span class="p">,</span>
+                               <span class="p">(</span><span class="n">student</span><span class="o">.</span><span class="n">student_id</span><span class="p">,</span> <span class="n">student</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">student</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">student</span><span class="o">.</span><span class="n">_email</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">instructor</span> <span class="ow">in</span> <span class="n">instructors</span><span class="p">:</span>
+                <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO instructors (instructor_id, name, age, email) VALUES (?, ?, ?, ?)&quot;</span><span class="p">,</span>
+                               <span class="p">(</span><span class="n">instructor</span><span class="o">.</span><span class="n">instructor_id</span><span class="p">,</span> <span class="n">instructor</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">instructor</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="n">instructor</span><span class="o">.</span><span class="n">_email</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">course</span> <span class="ow">in</span> <span class="n">courses</span><span class="p">:</span>
+                <span class="n">instructor_id</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">i</span><span class="o">.</span><span class="n">instructor_id</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">instructors</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">course</span><span class="o">.</span><span class="n">instructor</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO courses (course_id, course_name, instructor_id) VALUES (?, ?, ?)&quot;</span><span class="p">,</span>
+                               <span class="p">(</span><span class="n">course</span><span class="o">.</span><span class="n">course_id</span><span class="p">,</span> <span class="n">course</span><span class="o">.</span><span class="n">course_name</span><span class="p">,</span> <span class="n">instructor_id</span><span class="p">))</span>
+
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="s2">&quot;Data loaded successfully.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dropdowns</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error loading data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SchoolManagementSystem.export_to_csv">
+<a class="viewcode-back" href="../Lab.html#Lab.SchoolManagementSystem.export_to_csv">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exports the data from the database to a CSV file.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;school_management.db&#39;</span><span class="p">)</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Student&#39; as type, student_id, name, age, email FROM students&quot;</span><span class="p">)</span>
+            <span class="n">students</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Instructor&#39; as type, instructor_id, name, age, email FROM instructors&quot;</span><span class="p">)</span>
+            <span class="n">instructors</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Course&#39; as type, course_id, course_name, instructor_id, &#39;&#39; FROM courses&quot;</span><span class="p">)</span>
+            <span class="n">courses</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT &#39;Registration&#39; as type, student_id, course_id, &#39;&#39;, &#39;&#39; FROM registrations&quot;</span><span class="p">)</span>
+            <span class="n">registrations</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;school_data.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+                <span class="n">csvwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+                <span class="n">csvwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Type&#39;</span><span class="p">,</span> <span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="s1">&#39;Age/Course Name&#39;</span><span class="p">,</span> <span class="s1">&#39;Email/Instructor ID&#39;</span><span class="p">])</span>
+
+                <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">students</span> <span class="o">+</span> <span class="n">instructors</span> <span class="o">+</span> <span class="n">courses</span> <span class="o">+</span> <span class="n">registrations</span><span class="p">:</span>
+                    <span class="n">csvwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="s2">&quot;Data exported to CSV successfully.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show_popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error exporting data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">is_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../Lab.html#Lab.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main function that runs the School Management System application.&quot;&quot;&quot;</span>
+    <span class="n">create_tables</span><span class="p">()</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">([])</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">SchoolManagementSystem</span><span class="p">()</span>
+    <span class="n">window</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Charbel Toumieh.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
