@@ -34,6 +34,8 @@ To view it, open the following file:
    ```bash
    /build/html/index.html
    ```
+![image](https://github.com/user-attachments/assets/556915ea-9206-4157-b3c5-93ef5010f6b3)
+![image](https://github.com/user-attachments/assets/aabb5a43-df07-401e-8548-f9485829d4a5)
 
 
 ## Sample Screenshots   
