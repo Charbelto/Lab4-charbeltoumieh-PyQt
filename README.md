@@ -17,7 +17,7 @@ This project is a PyQt-based application developed for educational purposes. It 
    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
 3. **Install Dependencies**   
-   This project requires the following Python packages:
+   This project requires the following Python packages:   
    PyQt5
    
    Install the required packages using pip:
