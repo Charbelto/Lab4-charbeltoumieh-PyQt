@@ -10,20 +10,20 @@ This project is a PyQt-based application developed for educational purposes. It 
    ```bash
    git clone https://github.com/Charbelto/Lab4-charbeltoumieh-PyQt.git
    cd Lab4-charbeltoumieh-PyQt
-2. **Set Up a Virtual Environment (optional but recommended)**
+2. **Set Up a Virtual Environment (optional but recommended)**   
    Create a virtual environment to manage dependencies:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
-3. **Install Dependencies**
+3. **Install Dependencies**   
    This project requires the following Python packages:
    PyQt5
    
    Install the required packages using pip:
    ```bash
    pip install -r requirements.txt
-5. **Run the Application**
+5. **Run the Application**   
    Launch the application with:
    ```bash
    python main.py
